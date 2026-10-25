@@ -1,0 +1,4 @@
+body{font-family:system-ui,sans-serif;background:#0f172a;color:#e2e8f0;display:grid;place-items:center;min-height:100vh;margin:0}
+main{max-width:600px;padding:2rem;text-align:center}
+code{background:#1e293b;padding:2px 6px;border-radius:4px}
+a{color:#38bdf8}

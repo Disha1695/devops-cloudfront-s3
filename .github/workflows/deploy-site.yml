@@ -1,0 +1,19 @@
+# Optional: auto-deploy site + invalidate cache on every push to main.
+# Needs repo secrets: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET, CF_DISTRIBUTION_ID
+name: Deploy static site
+on:
+  push:
+    branches: [main]
+    paths: ["site/**"]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+      - run: aws s3 sync site/ "s3://${{ secrets.S3_BUCKET }}" --delete
+      - run: aws cloudfront create-invalidation --distribution-id "${{ secrets.CF_DISTRIBUTION_ID }}" --paths "/*"
